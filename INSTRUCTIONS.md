@@ -79,7 +79,7 @@ etc
 
 To lottery mine with Datum-Gateway, simply remove the text from **Datum Pool Host** in your config. 
 
-With default settings, you will Pool Mine on OCEAN and automatically switch to Lottery Mining if the pool were to ever go offline. If you wish to disable this, disable **Failover To Lottery** in your config.
+With default settings, you will Pool Mine on OCEAN and automatically switch to Lottery Mining if the pool were to ever go offline. If you wish to disable this, disable **Pooled Mining Only ** in your config.
 
 **Note: Lottery Mining means no rewards unless you find blocks. Make sure you're familiar with the differences to Pooled Mining.**
 
