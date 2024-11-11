@@ -258,12 +258,12 @@ export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
 	type: "string",
 	name: "Log File",
 	description: "Path to file to write log messages, when enabled",
-	default: "/root/start9/logs.txt"
+	default: "/root/start9/logs.txt",
 	nullable: "true",
       },
       log_level_file: {
 	type: "number",
-	name" "File Log Level",
+	name: "File Log Level",
 	description: "Minimum log level for log file messages",
 	default: "1",
 	nullable: "true",
