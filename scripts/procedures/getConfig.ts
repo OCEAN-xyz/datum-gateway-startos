@@ -247,6 +247,27 @@ export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
         default: 2,
         nullable: false,
       },
+      log_to_file: {
+	type: "boolean",
+	name: "Log to File",
+	description: "Enable logging of messages to a file",
+	default: "false",
+	nullable: "true",	
+      },
+      log_file: {
+	type: "string",
+	name: "Log File",
+	description: "Path to file to write log messages, when enabled",
+	default: "/root/start9/logs.txt"
+	nullable: "true",
+      },
+      log_level_file: {
+	type: "number",
+	name" "File Log Level",
+	description: "Minimum log level for log file messages",
+	default: "1",
+	nullable: "true",
+      },
     },
   },
   "datum":{
@@ -277,13 +298,6 @@ export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
         default: "f21f2f0ef0aa1970468f22bad9bb7f4535146f8e4a8f646bebc93da3d89b1406f40d032f09a417d94dc068055df654937922d2c89522e3e8f6f0e649de473003",
         nullable: true,
       },
-      // pool_username: {
-      //   type: "string",
-      //   name: "Pool Username",
-      //   description: "Pool username when using DATUM, if different than mining.pool_address (string, defaults to empty)",
-      //   default: "",
-      //   nullable: true,
-      // },
       pool_pass_workers: {
         type: "boolean",
         name: "Pool Pass Workers",
