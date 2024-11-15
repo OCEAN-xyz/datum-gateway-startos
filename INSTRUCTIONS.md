@@ -39,7 +39,7 @@ By default, rewards from mining on OCEAN will go to Bitcoin addresses written in
 
 **If you have mined on OCEAN before and wish to use Datum-Gateway now, you can leave the Bitcoin addresses in your miners, they will override what is written in Datum's config - just leave "Pool Pass Full Users" enabled.**
 
-(You will still need to enter a valid Bitcoin address into your Datum-Gateway config. This is simply a fail-safe should the pool go down and it will be where your rewards go if you successfully Lottery Mine a block. Datum-Gateway will not start without a valid Bitcoin address configured.)
+(You will still need to enter a valid Bitcoin address into your Datum-Gateway config. This is simply a fail-safe should the pool go down and it will be where your rewards go if you successfully mine a block. Datum-Gateway will not start without a valid Bitcoin address configured.)
 
 If you chose to write only worker names in your miners and omit Bitcoin address(es) then you must disable **"Pool Pass Full Users"** and then the Bitcoin address in your Datum-Gateway config will be what gets used on OCEAN. Choose this option if you would like to just have worker names in your miners rather than Bitcoin addresses with worker names appended. See the next section for more details on setting up your miners.
 
@@ -85,7 +85,11 @@ With this setup, you will keep all rewards from any blocks you find and they wil
 
 # Failovers
 
-With default settings, you will Pool-Mine on OCEAN and **not** fail over to non-opooled mining unless you disable Pooled Mining as above. If you leave **"Pooled Mining only**" enabled and your connection to the pool fails, DATUM will stop and your miners will switch to mining on any backup pool they are configured to use.
+With default settings, you will pool-mine on OCEAN with no failover. If your connection to the pool fails, DATUM will stop and your miners will switch to mining on any backup pool they are configured to use.
+
+If you wish to failover to non-pool mining, simply disable **"Pool Mining Only"**.
+
+If you wish to intentionally non-pool mine that requires removing the text in **Datum Pool Host** as in the prior section.
 
 # Installing and Running simpleproxy
 
