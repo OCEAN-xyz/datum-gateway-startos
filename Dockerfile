@@ -2,7 +2,7 @@ FROM debian:bookworm-slim AS build
 
 RUN apt update && \
     apt-get install -y build-essential cmake curl libmicrohttpd-dev libjansson-dev \
-                       libcurl4-openssl-dev libpq-dev libgcrypt20-dev libsodium-dev \
+                       libcurl4-openssl-dev libgcrypt20-dev libsodium-dev \
                        netcat-traditional pkg-config git
 
 ARG ARCH
