@@ -25,7 +25,7 @@ If you do not, you should wait for StartOS v0.3.6.
 
 Datum-Gateway is for solo mining!
 
-You can Lottery Mine where you pay yourself the entire block reward for any blocks your find.
+You can pay yourself the entire block reward for any blocks your find (non-pooled mining).
 
 You can also Pool Mine on a pool that supports DATUM where you will split rewards with other miners for increased cash flow.
 
@@ -75,17 +75,17 @@ etc
 
 **Password** can be left blank. If your miner insists on having something written there, you can write "x" or whatever you'd like.
 
-# Lottery Mining
+# Non-Pooled Mining
 
-**Note: Lottery Mining means no rewards unless you find blocks. Make sure you're familiar with the differences to Pooled Mining.**
+**Note: This means no rewards unless you find blocks. Make sure you're familiar with the differences to Pooled Mining.**
 
-To lottery mine with Datum-Gateway, simply remove the text from **Datum Pool Host** in your config and disable **"Pooled Mining Only"**. 
+To do this with Datum-Gateway, simply remove the text from **Datum Pool Host** in your config and disable **"Pooled Mining Only"**. 
 
 With this setup, you will keep all rewards from any blocks you find and they will be paid out to the address in **"Pool Address"**.
 
 # Failovers
 
-With default settings, you will Pool-Mine on OCEAN and **not** fail over to lottery mining unless you disable Pooled Mining as above. If you leave **"Pooled Mining only**" enabled and your connection to the pool fails, DATUM will stop and your miners will switch to mining on any backup pool they are configured to use.
+With default settings, you will Pool-Mine on OCEAN and **not** fail over to non-opooled mining unless you disable Pooled Mining as above. If you leave **"Pooled Mining only**" enabled and your connection to the pool fails, DATUM will stop and your miners will switch to mining on any backup pool they are configured to use.
 
 # Installing and Running simpleproxy
 
