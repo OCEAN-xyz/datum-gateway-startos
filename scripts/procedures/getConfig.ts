@@ -220,6 +220,13 @@ export const getConfig: T.ExpectedExports.getConfig = compat.getConfig({
         integral: true,
         default: 7152,
       },
+      admin_password: {
+        type: "string",
+        name: "Admin Password",
+        description: "Admin password for actions/changes",
+        default: "",
+        nullable: true,
+      },
     },
   },
   // "extra_block_submissions": {

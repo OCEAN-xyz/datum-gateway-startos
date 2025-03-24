@@ -29,6 +29,16 @@ function migrate_0221_to_022(config: any) {
   return config;
 }
 
+function migrate_022_to_024(config: any) {
+  config.api.admin_password = '';
+  return config;
+}
+
+function migrate_024_to_022(config: any) {
+  delete config.api.admin_password;
+  return config;
+}
+
 export const migration: T.ExpectedExports.migration =
   compat.migrations.fromMapping(
     {
@@ -59,7 +69,19 @@ export const migration: T.ExpectedExports.migration =
           true,
           { version: "0.2.2.1", type: "down"}
         )
+      },
+      "0.3.1": {
+        up: compat.migrations.updateConfig(
+          migrate_022_to_024,
+          true,
+          { version: "0.3.1", type: "up"}
+        ),
+        down: compat.migrations.updateConfig(
+          migrate_024_to_022,
+          true,
+          { version: "0.3.1", type: "down"}
+        )
       }
     },
-    "0.2.2.1"
+    "0.2.4"
   );
