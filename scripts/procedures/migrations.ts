@@ -83,5 +83,5 @@ export const migration: T.ExpectedExports.migration =
         )
       }
     },
-    "0.2.4"
+    "0.2.5"
   );

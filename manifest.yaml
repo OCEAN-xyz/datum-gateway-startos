@@ -5,10 +5,10 @@ id: datum
  # A human readable service title
 title: "Datum Gateway"
 # Service version - accepts up to four digits, where the last confirms to revisions necessary for StartOS - see documentation: https://github.com/Start9Labs/emver-rs. This value will change with each release of the service. 
-version: 0.2.4
+version: 0.2.5
 # Release notes for the update - can be a string, paragraph or URL
 release-notes: |
-  - Release notes: https://github.com/OCEAN-xyz/datum_gateway/releases/tag/v0.2.4beta
+  - Release notes: https://github.com/OCEAN-xyz/datum_gateway/releases/tag/v0.2.5beta
 license: MIT
 wrapper-repo: "https://github.com/ocean-xyz/datum-gateway-startos"
 upstream-repo: "https://github.com/ocean-xyz/datum-gateway"
