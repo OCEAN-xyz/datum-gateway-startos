@@ -25,11 +25,15 @@ If you do not, you should wait for StartOS v0.3.6.
 
 Datum-Gateway is for solo mining!
 
-You can pay yourself the entire block reward for any blocks your find (non-pooled mining).
+You can pay yourself the entire block reward for any blocks you find (non-pooled mining).
 
 You can also Pool Mine on a pool that supports DATUM where you will split rewards with other miners for increased cash flow.
 
-By default, Datum-Gateway will do the latter on https://ocean.xyz without any additional configuration beyond entering a Bitcoin address under "Bitcoin Address". 
+By default, Datum-Gateway will do the latter on https://ocean.xyz without any additional configuration beyond entering a Bitcoin address under "Bitcoin Address".
+
+# Configure your home router
+
+If your mining hardware does not support `.local` mDNS URLs, log in to your home router and assign a static IP address to your Start9 server. By default, home routers randomly lease an IP address to connected devices using DHCP, which can change without warning. If your Start9 server's local IP address changes, your miners will either go offline, or switch to an alternate pool.
 
 # Pooled Mining on OCEAN
 
@@ -107,7 +111,9 @@ Copy and paste the following lines of code one by one:
 
 Now copy and paste the following chunk of code in one command:
 
+```bash
 echo -e '[Unit]\nDescription=Simpleproxy Datum Forward\nWants=podman.service\nAfter=podman.service\n\n[Service]\nType=simple\nRestart=always\nRestartSec=3\nExecStartPre=/bin/bash -c "/bin/systemctl set-environment IP=$(ip route | grep default | awk '\''{print $9}'\'')"\nExecStart=/usr/bin/simpleproxy -L ${IP}:23334 -R datum.embassy:23335\n\n[Install]\nWantedBy=multi-user.target' > /lib/systemd/system/simpleproxy.datum.service
+```
 
 Next, copy and paste the following:
 
