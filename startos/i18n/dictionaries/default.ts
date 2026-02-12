@@ -38,7 +38,6 @@ const dict = {
   'Config pool address': 72,
   'Config the pool address to mine on.': 73,
   'Bitcoin address set.': 74,
-  'Sucess': 75,
 
   // setConfig
   'Set Config': 100,

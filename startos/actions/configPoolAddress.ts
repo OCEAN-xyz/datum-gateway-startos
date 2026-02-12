@@ -61,7 +61,7 @@ export const configPoolAddress = sdk.Action.withInput(
 
     return {
       version: '1',
-      title: i18n('Sucess'),
+      title: i18n('Success'),
       message: i18n('Bitcoin address set.'),
       result: null,
     }

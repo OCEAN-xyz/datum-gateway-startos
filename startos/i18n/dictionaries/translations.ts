@@ -38,7 +38,6 @@ export default {
     72: 'Configurer l\'adresse pour la pool',
     73: 'Configurer l\'adresse pour la pool sur laquelle miner',
     74: 'Adresse Bitcoin configurée',
-    75: 'Succès',
 
     // setConfig
     100: 'Définir la configuration',
@@ -52,7 +51,7 @@ export default {
     204: 'Mise à jour du travail en secondes',
     205: 'à quelle fréquence bitcoind doit envoyer les mise à jour du modèle de bloc',
     206: 'Réglages du serveur Stratum',
-    207: 'Conguration du serveur stratum de Datum gateway',
+    207: 'Configuration du serveur stratum de Datum gateway',
     208: 'Port d\'écoute',
     209: 'Port d\'écoute pour Stratum',
     210: 'Nombre maximum de clients par Thread',
@@ -84,7 +83,7 @@ export default {
     236: 'Doit être une addresse Bitcoin valide',
     237: 'Pourcentage attribué à l\'adresse',
     238: 'Réglages du minage',
-    239: 'régalges du minage',
+    239: 'réglages du minage',
     240: 'Adresse Bitcoin',
     241: 'Adresse Bitcoin utilisée pour le minage sur DATUM Pool et pour les récompenses de minage en solo.',
     242: 'Tag principal de la coinbase',

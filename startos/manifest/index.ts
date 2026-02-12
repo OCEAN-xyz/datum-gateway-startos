@@ -1,11 +1,5 @@
 import { setupManifest } from '@start9labs/start-sdk'
-import { SDKImageInputSpec } from '@start9labs/start-sdk/base/lib/types/ManifestTypes'
-import { short, long } from 'bitcoin-knots/startos/manifest/i18n'
-
-const BUILD = process.env.BUILD || ''
-
-const architectures =
-  BUILD === 'x86_64' || BUILD === 'aarch64' ? [BUILD] : ['x86_64', 'aarch64']
+import { short, long } from './i18n'
 
 export const manifest = setupManifest({
   id: 'datum',
@@ -28,26 +22,15 @@ export const manifest = setupManifest({
           workdir: '.',
         },
       },
-      arch: architectures,
-    } as SDKImageInputSpec,
-  },
-  hardwareRequirements: {
-    arch: architectures,
-  },
-  alerts: {
-    install: null,
-    update: null,
-    uninstall: null,
-    restore: null,
-    start: null,
-    stop: null,
+      arch: ['x86_64', 'aarch64'],
+    },
   },
   dependencies: {
     bitcoind: {
       description: 'Used to subscribe to new block events.',
       optional: true,
       metadata: {
-        title: 'A Bitcoin Full Node',
+        title: 'Bitcoin',
         icon: 'https://bitcoin.org/img/icons/opengraph.png',
       },
     },
