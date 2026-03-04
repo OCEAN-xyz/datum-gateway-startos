@@ -1,19 +1,19 @@
-import { configJson } from './fileModels/datum_gateway_config.json'
-import { sdk } from './sdk'
-import { stratumPort, uiPort, dataDir } from './utils'
 import { manifest } from 'bitcoin-knots/startos/manifest'
+import { configJson } from './fileModels/datum_gateway_config.json'
 import { i18n } from './i18n'
+import { sdk } from './sdk'
+import { dataDir, knotsMountpoint, stratumPort, uiPort } from './utils'
 
 export const main = sdk.setupMain(async ({ effects }) => {
   console.info('Starting Datum Gateway...')
-  
+
   const conf = await configJson.read().const(effects)
   if (!conf) {
     throw new Error('datum config file not found')
   }
 
   return sdk.Daemons.of(effects)
-    .addDaemon('primary', {
+    .addDaemon('datum', {
       subcontainer: await sdk.SubContainer.of(
         effects,
         { imageId: 'datum' },
@@ -28,7 +28,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
             dependencyId: 'bitcoind',
             volumeId: 'main',
             subpath: null,
-            mountpoint: '/mnt/knots',
+            mountpoint: knotsMountpoint,
             readonly: true,
           }),
         'datum-sub',
@@ -60,6 +60,6 @@ export const main = sdk.setupMain(async ({ effects }) => {
             errorMessage: i18n('Stratum server is unavailable'),
           }),
       },
-      requires: ['primary'],
+      requires: ['datum'],
     })
 })

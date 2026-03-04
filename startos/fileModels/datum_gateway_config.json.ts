@@ -1,73 +1,119 @@
 import { FileHelper, z } from '@start9labs/start-sdk'
-import { configDefaults, dataDir } from '../utils'
+import { dataDir, knotsMountpoint, stratumPort, uiPort } from '../utils'
 import { sdk } from '../sdk'
 
-const { bitcoind, stratum, mining, api, logger, datum } = configDefaults
+const optString = z.string().optional().catch(undefined)
+const optNumber = z.number().optional().catch(undefined)
+const optBoolean = z.boolean().optional().catch(undefined)
 
-export const configJsonShape = z.object({
-  bitcoind: z.object({
-    rpccookiefile: z.string().catch(bitcoind.rpccookiefile),
-    rpcurl: z.string().catch(bitcoind.rpcurl),
-    work_update_seconds: z.number().catch(bitcoind.work_update_seconds),
-    notify_fallback: z.boolean().catch(bitcoind.notify_fallback),
-  }),
-  stratum: z.object({
-    listen_addr: z.string().catch(stratum.listen_addr),
-    listen_port: z.number().catch(stratum.listen_port),
-    max_clients_per_thread: z.number().catch(stratum.max_clients_per_thread),
-    max_threads: z.number().catch(stratum.max_threads),
-    max_clients: z.number().catch(stratum.max_clients),
-    trust_proxy: z.number().catch(stratum.trust_proxy),
-    vardiff_min: z.number().catch(stratum.vardiff_min),
-    vardiff_target_shares_min: z.number().catch(
-      stratum.vardiff_target_shares_min,
-    ),
-    vardiff_quickdiff_count: z.number().catch(stratum.vardiff_quickdiff_count),
-    vardiff_quickdiff_delta: z.number().catch(stratum.vardiff_quickdiff_delta),
-    share_stale_seconds: z.number().catch(stratum.share_stale_seconds),
-    fingerprint_miners: z.boolean().catch(stratum.fingerprint_miners),
-    idle_timeout_no_subscribe: z.number().catch(
-      stratum.idle_timeout_no_subscribe,
-    ),
-    idle_timeout_no_shares: z.number().catch(stratum.idle_timeout_no_shares),
-    idle_timeout_max_last_work: z.number().catch(
-      stratum.idle_timeout_max_last_work,
-    ),
+const bitcoindShape = z.object({
+  // Enforced
+  rpccookiefile: z
+    .literal(`${knotsMountpoint}/.cookie`)
+    .catch(`${knotsMountpoint}/.cookie`),
+  rpcurl: z
+    .literal('http://bitcoind.startos:8332')
+    .catch('http://bitcoind.startos:8332'),
+  // Configurable (upstream defaults apply when absent)
+  work_update_seconds: optNumber,
+  notify_fallback: optBoolean,
+})
+
+const stratumShape = z.object({
+  // Enforced
+  listen_addr: z.literal('').catch(''),
+  listen_port: z.literal(stratumPort).catch(stratumPort),
+  // Configurable
+  max_clients_per_thread: optNumber,
+  max_threads: optNumber,
+  max_clients: optNumber,
+  trust_proxy: optNumber,
+  vardiff_min: optNumber,
+  vardiff_target_shares_min: optNumber,
+  vardiff_quickdiff_count: optNumber,
+  vardiff_quickdiff_delta: optNumber,
+  share_stale_seconds: optNumber,
+  fingerprint_miners: optBoolean,
+  idle_timeout_no_subscribe: optNumber,
+  idle_timeout_no_shares: optNumber,
+  idle_timeout_max_last_work: optNumber,
+  username_modifiers: z
+    .record(z.string(), z.record(z.string(), z.number()))
+    .optional()
+    .catch(undefined),
+})
+
+const miningShape = z.object({
+  pool_address: optString,
+  coinbase_tag_primary: optString,
+  coinbase_tag_secondary: optString,
+  coinbase_unique_id: optNumber,
+})
+
+const apiShape = z.object({
+  // Enforced
+  listen_port: z.literal(uiPort).catch(uiPort),
+  listen_addr: z.literal('').catch(''),
+  // Configurable
+  admin_password: z.string().catch(''),
+  allow_insecure_auth: optBoolean,
+})
+
+const loggerShape = z.object({
+  // Enforced
+  log_to_stderr: z.literal(false).catch(false),
+  // Configurable
+  log_to_file: optBoolean,
+  log_file: optString,
+  log_rotate_daily: optBoolean,
+  log_calling_function: optBoolean,
+  log_level_console: optNumber,
+  log_level_file: optNumber,
+})
+
+const datumShape = z.object({
+  pool_host: optString,
+  pool_port: optNumber,
+  pool_pubkey: optString,
+  pool_pass_workers: optBoolean,
+  pool_pass_full_users: optBoolean,
+  always_pay_self: optBoolean,
+  pooled_mining_only: optBoolean,
+  protocol_global_timeout: optNumber,
+})
+
+const diskShape = z.object({
+  bitcoind: bitcoindShape.catch(bitcoindShape.parse({})),
+  stratum: stratumShape.catch(stratumShape.parse({})),
+  mining: miningShape.catch(miningShape.parse({})),
+  api: apiShape.catch(apiShape.parse({})),
+  logger: loggerShape.catch(loggerShape.parse({})),
+  datum: datumShape.catch(datumShape.parse({})),
+})
+
+// Form shape: same as disk but stratum.username_modifiers is an array
+const stratumFormShape = stratumShape
+  .omit({ username_modifiers: true })
+  .extend({
     username_modifiers: z
-      .record(z.string(), z.record(z.string(), z.number()))
-      .catch(stratum.username_modifiers),
-  }),
-  mining: z.object({
-    pool_address: z.string().catch(mining.pool_address),
-    coinbase_tag_primary: z.string().catch(mining.coinbase_tag_primary),
-    coinbase_tag_secondary: z.string().catch(mining.coinbase_tag_secondary),
-    coinbase_unique_id: z.number().catch(mining.coinbase_unique_id),
-  }),
-  api: z.object({
-    allow_insecure_auth: z.boolean().catch(api.allow_insecure_auth),
-    listen_port: z.number().catch(api.listen_port),
-    listen_addr: z.string().catch(api.listen_addr),
-    admin_password: z.string().catch(api.admin_password),
-  }),
-  logger: z.object({
-    log_to_stderr: z.boolean().catch(logger.log_to_stderr),
-    log_to_file: z.boolean().catch(logger.log_to_file),
-    log_file: z.string().catch(logger.log_file),
-    log_rotate_daily: z.boolean().catch(logger.log_rotate_daily),
-    log_calling_function: z.boolean().catch(logger.log_calling_function),
-    log_level_console: z.number().catch(logger.log_level_console),
-    log_level_file: z.number().catch(logger.log_level_file),
-  }),
-  datum: z.object({
-    pool_host: z.string().catch(datum.pool_host),
-    pool_port: z.number().catch(datum.pool_port),
-    pool_pubkey: z.string().catch(datum.pool_pubkey),
-    pool_pass_workers: z.boolean().catch(datum.pool_pass_workers),
-    pool_pass_full_users: z.boolean().catch(datum.pool_pass_full_users),
-    always_pay_self: z.boolean().catch(datum.always_pay_self),
-    pooled_mining_only: z.boolean().catch(datum.pooled_mining_only),
-    protocol_global_timeout: z.number().catch(datum.protocol_global_timeout),
-  }),
+      .array(
+        z.object({
+          name: z.string(),
+          addresses: z.array(
+            z.object({ address: z.string().catch(''), split: z.number() }),
+          ),
+        }),
+      )
+      .catch([]),
+  })
+
+const formShape = z.object({
+  bitcoind: bitcoindShape.catch(bitcoindShape.parse({})),
+  stratum: stratumFormShape.catch(stratumFormShape.parse({})),
+  mining: miningShape.catch(miningShape.parse({})),
+  api: apiShape.catch(apiShape.parse({})),
+  logger: loggerShape.catch(loggerShape.parse({})),
+  datum: datumShape.catch(datumShape.parse({})),
 })
 
 export const configJson = FileHelper.json(
@@ -75,12 +121,42 @@ export const configJson = FileHelper.json(
     base: sdk.volumes.main,
     subpath: `${dataDir}/datum_gateway_config.json`,
   },
-  configJsonShape,
+  formShape,
+  {
+    onRead: (a: unknown) => {
+      const disk = diskShape.parse(a)
+      return {
+        ...disk,
+        stratum: {
+          ...disk.stratum,
+          username_modifiers: Object.entries(
+            disk.stratum.username_modifiers ?? {},
+          ).map(([name, addressMap]) => ({
+            name,
+            addresses: Object.entries(addressMap).map(([address, split]) => ({
+              address,
+              split,
+            })),
+          })),
+        },
+      }
+    },
+    onWrite: (a: z.infer<typeof formShape>) => {
+      const modifiers: Record<string, Record<string, number>> = {}
+      for (const { name, addresses } of a.stratum.username_modifiers ?? []) {
+        const addressMap: Record<string, number> = {}
+        for (const { address, split } of addresses) {
+          addressMap[address ?? ''] = split
+        }
+        modifiers[name] = addressMap
+      }
+      return {
+        ...a,
+        stratum: {
+          ...a.stratum,
+          username_modifiers: modifiers,
+        },
+      }
+    },
+  },
 )
-
-export async function ensureConfigFile(effects: any) {
-  const exists = await configJson.read().const(effects)
-  if (!exists) {
-    await configJson.write(effects, configDefaults)
-  }
-}

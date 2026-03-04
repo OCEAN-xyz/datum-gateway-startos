@@ -34,26 +34,26 @@ DATUM (Decentralized Alternative Templates for Universal Mining) enables miners 
 
 ## Image and Container Runtime
 
-| Property | Value |
-|----------|-------|
-| Image | Custom Dockerfile (multi-stage Debian Bookworm build from upstream C source) |
-| Architectures | x86_64, aarch64 |
-| Entrypoint | `datum_gateway -c /root/data/datum_gateway_config.json` |
+| Property      | Value                                                                        |
+| ------------- | ---------------------------------------------------------------------------- |
+| Image         | Custom Dockerfile (multi-stage Debian Bookworm build from upstream C source) |
+| Architectures | x86_64, aarch64                                                              |
+| Entrypoint    | `datum_gateway -c /root/data/datum_gateway_config.json`                      |
 
 The custom Dockerfile compiles `datum_gateway` from source using CMake with dependencies: libmicrohttpd, libjansson, libcurl, libgcrypt, and libsodium.
 
 ## Volume and Data Layout
 
-| Volume | Mount Point | Purpose |
-|--------|-------------|---------|
-| `main` | `/root` | All Datum Gateway data (config, logs) |
+| Volume | Mount Point | Purpose                               |
+| ------ | ----------- | ------------------------------------- |
+| `main` | `/root`     | All Datum Gateway data (config, logs) |
 
 The Bitcoin node's data volume is also mounted read-only at `/mnt/knots` for cookie-based RPC authentication.
 
 Key files on the `main` volume:
 
-| File | Purpose |
-|------|---------|
+| File                             | Purpose                                                      |
+| -------------------------------- | ------------------------------------------------------------ |
 | `data/datum_gateway_config.json` | All Datum Gateway configuration (managed by StartOS actions) |
 
 ## Installation and First-Run Flow
@@ -69,38 +69,38 @@ Key files on the `main` volume:
 
 Datum Gateway is configured through **StartOS actions** that write to `datum_gateway_config.json` on the `main` volume.
 
-### Set Config Action
+### Config Actions
 
-The **Set Config** action provides a comprehensive form covering all configuration sections:
+Each configuration section has its own dedicated action:
 
-| Section | Settings |
-|---------|----------|
-| **Bitcoin RPC** | RPC URL (immutable, `http://bitcoind.startos:8332`), work update interval (5–120 seconds) |
-| **Stratum Server** | Listen port (immutable, 23334), max clients per thread, max threads, max clients, PROXY trust level, vardiff parameters (min difficulty, target shares/min, update speed, delta), stale share timeout, miner fingerprinting, username modifiers for share distribution |
-| **Mining** | Bitcoin payout address, primary/secondary coinbase tags, coinbase unique ID |
-| **API** | Dashboard listen port (immutable, 7152), allow insecure authentication (for Safari) |
-| **Logger** | Console log level (0–5), file logging toggle, log file path, file log level |
-| **Datum Pool** | Pool host, pool port, pool public key, pass workers/full users to pool, always pay self, reward sharing strategy (require/prefer/never) |
+| Action                      | Settings                                                                                                                                                                                          |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Bitcoin RPC Settings**    | Work update interval (5–120 seconds)                                                                                                                                                              |
+| **Stratum Server Settings** | Max clients per thread, max threads, max clients, PROXY trust level, vardiff parameters (min difficulty, target shares/min, update speed, delta), stale share timeout, miner fingerprinting, username modifiers |
+| **Mining Settings**         | Bitcoin payout address, primary/secondary coinbase tags, coinbase unique ID                                                                                                                        |
+| **API**                     | Allow insecure authentication (for Safari)                                                                                                                                                         |
+| **Logger**                  | Console log level (0–5), file logging toggle, log file path, file log level                                                                                                                        |
+| **Datum**                   | Pool host, pool port, pool public key, pass workers/full users to pool, always pay self, reward sharing strategy (require/prefer/never)                                                            |
 
 Settings **not** managed by StartOS (hardcoded or derived):
 
-| Setting | Value | Reason |
-|---------|-------|--------|
-| `rpccookiefile` | `/mnt/knots/.cookie` | Bitcoin cookie auth via mounted volume |
-| `rpcurl` | `http://bitcoind.startos:8332` | Internal service networking |
-| `listen_addr` (stratum) | `""` (all interfaces) | Required for container networking |
-| `listen_addr` (api) | `""` (all interfaces) | Required for container networking |
-| `notify_fallback` | `true` | Ensures block updates if blocknotify fails |
+| Setting                 | Value                          | Reason                                     |
+| ----------------------- | ------------------------------ | ------------------------------------------ |
+| `rpccookiefile`         | `/mnt/knots/.cookie`           | Bitcoin cookie auth via mounted volume     |
+| `rpcurl`                | `http://bitcoind.startos:8332` | Internal service networking                |
+| `listen_addr` (stratum) | `""` (all interfaces)          | Required for container networking          |
+| `listen_addr` (api)     | `""` (all interfaces)          | Required for container networking          |
+| `notify_fallback`       | `true`                         | Ensures block updates if blocknotify fails |
 
 ### Reward Sharing Strategy
 
 The **reward sharing** selector in the Datum Pool section controls pooled vs solo mining:
 
-| Option | Behavior |
-|--------|----------|
+| Option                | Behavior                                                                                                                                                                              |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Require** (default) | Pool mining required; `pooled_mining_only` = true. If pool host is empty, defaults to OCEAN. If pool goes down, Datum stops issuing work — miners should have backup pools configured |
-| **Prefer** | Pool mining preferred; `pooled_mining_only` = false. Falls back to solo mining if pool is unavailable |
-| **Never** | Solo mining only; clears `pool_host` and sets `pooled_mining_only` = false. All block rewards go to the configured pool address |
+| **Prefer**            | Pool mining preferred; `pooled_mining_only` = false. Falls back to solo mining if pool is unavailable                                                                                 |
+| **Never**             | Solo mining only; clears `pool_host` and sets `pooled_mining_only` = false. All block rewards go to the configured pool address                                                       |
 
 ### Username Modifiers
 
@@ -108,14 +108,15 @@ The stratum server supports **username modifiers** for distributing mining share
 
 ## Network Access and Interfaces
 
-| Interface | Port | Protocol | Purpose |
-|-----------|------|----------|---------|
-| Web UI | 7152 | HTTP | Datum Gateway dashboard (admin password required) |
-| Stratum Server | 23334 | TCP (stratum+tcp) | Mining protocol — point ASICs here |
+| Interface      | Port  | Protocol          | Purpose                                           |
+| -------------- | ----- | ----------------- | ------------------------------------------------- |
+| Web UI         | 7152  | HTTP              | Datum Gateway dashboard (admin password required) |
+| Stratum Server | 23334 | TCP (stratum+tcp) | Mining protocol — point ASICs here                |
 
 ### Connecting Miners
 
 Configure mining hardware with:
+
 - **URL**: `stratum+tcp://<your-startos-address>:23334`
 - **Username**: Bitcoin payout address, optionally with worker name (e.g., `bc1q...abc.worker1`)
 - **Password**: Ignored — use `x` or leave blank
@@ -124,7 +125,7 @@ Configure mining hardware with:
 
 By default, **Pool Pass Full Users** is enabled. This means rewards from OCEAN (or any DATUM-supporting pool) go to the Bitcoin addresses configured in your **miners**, not the address in Datum Gateway's config. The config address acts as a fail-safe for solo mining rewards if the pool goes down.
 
-If you prefer to use a single payout address for all miners, disable **Pool Pass Full Users** in the Set Config action. Then the Bitcoin address in Datum Gateway's config will be used for pool payouts, and you can use just worker names (without addresses) in your miners.
+If you prefer to use a single payout address for all miners, disable **Pool Pass Full Users** in the Datum config action. Then the Bitcoin address in Datum Gateway's config will be used for pool payouts, and you can use just worker names (without addresses) in your miners.
 
 ### Failover Behavior
 
@@ -136,11 +137,15 @@ With the **Prefer** strategy, Datum Gateway falls back to solo mining if the poo
 
 ### Config
 
-| Action | Purpose | Inputs | Availability |
-|--------|---------|--------|-------------|
-| **Set Config** | Configure all Datum Gateway settings | Full config form (6 sections) | Any |
-| **Config Pool Address** | Set the Bitcoin address for mining rewards | Bitcoin address | Any |
-| **Create/Reset Password** | Generate admin password for the dashboard | None | Any |
+| Action                      | Purpose                                     | Availability |
+| --------------------------- | ------------------------------------------- | ------------ |
+| **Bitcoin RPC Settings**    | Configure Bitcoin RPC work update interval  | Any          |
+| **Stratum Server Settings** | Configure stratum server tuning and vardiff | Any          |
+| **Mining Settings**         | Configure payout address and coinbase tags  | Any          |
+| **API**                     | Configure dashboard authentication          | Any          |
+| **Logger**                  | Configure log levels and file logging       | Any          |
+| **Datum**                   | Configure pool connection and reward sharing| Any          |
+| **Create/Reset Password**   | Generate admin password for the dashboard   | Any          |
 
 The **Create/Reset Password** action dynamically shows "Create Password" when no password is set, and "Reset Password" otherwise. It generates a 22-character random password and saves it to the config.
 
@@ -152,17 +157,17 @@ The **Create/Reset Password** action dynamically shows "Create Password" when no
 
 ## Health Checks
 
-| Check | Method | Messages |
-|-------|--------|----------|
-| **Web Interface** | `checkPortListening` on port 7152 | Ready: "The Datum Gateway dashboard is ready" |
-| **Stratum Interface** | `checkPortListening` on port 23334 (1s timeout) | Ready: "Stratum server is available" |
+| Check                 | Method                                          | Messages                                      |
+| --------------------- | ----------------------------------------------- | --------------------------------------------- |
+| **Web Interface**     | `checkPortListening` on port 7152               | Ready: "The Datum Gateway dashboard is ready" |
+| **Stratum Interface** | `checkPortListening` on port 23334 (1s timeout) | Ready: "Stratum server is available"          |
 
-The Stratum health check requires the primary daemon to be ready first.
+The Stratum health check requires the datum daemon to be ready first.
 
 ## Dependencies
 
-| Dependency | Required | Version | Purpose |
-|------------|----------|---------|---------|
+| Dependency                    | Required | Version          | Purpose                                                                                     |
+| ----------------------------- | -------- | ---------------- | ------------------------------------------------------------------------------------------- |
 | **Bitcoin Node** (`bitcoind`) | Optional | >= 29.1:2-beta.0 | Block template generation via `getblocktemplate`; new block notifications via `blocknotify` |
 
 When the Bitcoin dependency is configured, Datum Gateway automatically creates a task on `bitcoind` to set `blocknotify = curl -s -m5 http://datum.startos:7152/NOTIFY`. This task is re-evaluated on every init to ensure the setting persists.
@@ -216,8 +221,13 @@ dependencies:
 startos_managed_files:
   - data/datum_gateway_config.json
 actions:
-  - set-config
-  - config-pool-address
+  - bitcoind-config
+  - stratum-config
+  - mining-config
+  - api-config
+  - logger-config
+  - datum-config
+  - autoconfig-pool-address (hidden, task-triggered)
   - reset-password
 health_checks:
   - checkPortListening:7152: web_interface
@@ -226,10 +236,10 @@ backup_volumes:
   - main (full volume)
 auto_configured_dependency_settings:
   bitcoind:
-    blocknotify: "curl -s -m5 http://datum.startos:7152/NOTIFY"
+    blocknotify: 'curl -s -m5 http://datum.startos:7152/NOTIFY'
 init_tasks:
   - reset-password (critical, if no admin password set)
-  - config-pool-address (critical, if no pool address set)
+  - autoconfig-pool-address (critical, if no pool address set)
 config_sections:
   - bitcoind (RPC settings)
   - stratum (server tuning, vardiff, username modifiers)

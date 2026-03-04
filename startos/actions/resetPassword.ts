@@ -1,11 +1,7 @@
 import { utils } from '@start9labs/start-sdk'
-import { sdk } from '../sdk'
-import { randomPassword } from '../utils'
-import {
-  configJson,
-  ensureConfigFile,
-} from '../fileModels/datum_gateway_config.json'
+import { configJson } from '../fileModels/datum_gateway_config.json'
 import { i18n } from '../i18n'
+import { sdk } from '../sdk'
 
 export const resetPassword = sdk.Action.withoutInput(
   // id
@@ -19,7 +15,9 @@ export const resetPassword = sdk.Action.withoutInput(
 
     return {
       name: hasPass ? i18n('Reset Password') : i18n('Create Password'),
-      description: hasPass ? i18n('Reset your admin password') : i18n('Create your admin password'),
+      description: hasPass
+        ? i18n('Reset your admin password')
+        : i18n('Create your admin password'),
       warning: null,
       allowedStatuses: 'any',
       group: 'Config',
@@ -29,9 +27,10 @@ export const resetPassword = sdk.Action.withoutInput(
 
   // the execution function
   async ({ effects }) => {
-    await ensureConfigFile(effects)
-
-    const admin_password = utils.getDefaultString(randomPassword)
+    const admin_password = utils.getDefaultString({
+      charset: 'a-z,A-Z,1-9,!,@,$,%,&,*',
+      len: 22,
+    })
 
     await configJson.merge(effects, { api: { admin_password } })
 

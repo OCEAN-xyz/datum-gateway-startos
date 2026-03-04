@@ -1,9 +1,19 @@
 import { sdk } from '../sdk'
-import { configPoolAddress } from './configPoolAddress'
+import { apiConfig } from './config/api'
+import { autoconfigPoolAddress } from './config/autoconfigPoolAddress'
+import { bitcoindConfig } from './config/bitcoind'
+import { datumConfig } from './config/datum'
+import { loggerConfig } from './config/logger'
+import { miningConfig } from './config/mining'
+import { stratumConfig } from './config/stratum'
 import { resetPassword } from './resetPassword'
-import { setConfig } from './setConfig/setConfig'
 
 export const actions = sdk.Actions.of()
   .addAction(resetPassword)
-  .addAction(setConfig)
-  .addAction(configPoolAddress)
+  .addAction(autoconfigPoolAddress)
+  .addAction(bitcoindConfig)
+  .addAction(stratumConfig)
+  .addAction(miningConfig)
+  .addAction(apiConfig)
+  .addAction(loggerConfig)
+  .addAction(datumConfig)
