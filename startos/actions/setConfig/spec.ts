@@ -476,5 +476,3 @@ export const inputSpec = InputSpec.of({
     }),
   ),
 })
-export const matchInputSpecSpec = inputSpec.validator
-export type InputSpecSpec = typeof matchInputSpecSpec._TYPE

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icon.png" alt="Datum Gateway Logo" width="21%">
+  <img src="icon.svg" alt="Datum Gateway Logo" width="21%">
 </p>
 
 # Datum Gateway on StartOS
@@ -7,8 +7,8 @@
 > **Upstream docs:** <https://ocean.xyz/docs/datum>
 >
 > Everything not listed in this document should behave the same as upstream
-> Datum Gateway v0.4.1. If a feature, setting, or behavior is not mentioned
-> here, the upstream documentation is accurate and fully applicable.
+> Datum Gateway. If a feature, setting, or behavior is not mentioned here,
+> the upstream documentation is accurate and fully applicable.
 
 DATUM (Decentralized Alternative Templates for Universal Mining) enables miners to create custom block templates using their own Bitcoin node, either for pooled mining on DATUM-supporting pools (such as OCEAN) or for solo mining. See the [upstream repo](https://github.com/ocean-xyz/datum-gateway) for general Datum Gateway documentation.
 
@@ -202,7 +202,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for build instructions and development wo
 
 ```yaml
 package_id: datum
-upstream_version: "0.4.1"
 image: custom Dockerfile (built from Datum Gateway C source)
 architectures: [x86_64, aarch64]
 volumes:

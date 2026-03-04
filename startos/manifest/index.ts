@@ -1,16 +1,17 @@
 import { setupManifest } from '@start9labs/start-sdk'
-import { short, long } from './i18n'
+import { bitcoinDescription, long, short } from './i18n'
 
 export const manifest = setupManifest({
   id: 'datum',
   title: 'Datum Gateway',
   license: 'mit',
-  wrapperRepo: 'https://github.com/ocean-xyz/datum-gateway-startos',
+  packageRepo: 'https://github.com/OCEAN-xyz/datum-gateway-startos/tree/next',
   upstreamRepo: 'https://github.com/ocean-xyz/datum-gateway',
-  supportSite: 'https://ocean.xyz',
-  marketingSite: 'https://ocean.xyz',
-  docsUrl:
-    'https://github.com/OCEAN-xyz/datum-gateway-startos/blob/next/docs/instructions.md', //@TODO update me for main branch
+  marketingUrl: 'https://ocean.xyz',
+  docsUrls: [
+    'https://github.com/OCEAN-xyz/datum-gateway-startos/tree/next/docs/instructions.md',
+    'https://ocean.xyz/docs/datum',
+  ],
   donationUrl: null,
   description: { short, long },
   volumes: ['main'],
@@ -27,11 +28,11 @@ export const manifest = setupManifest({
   },
   dependencies: {
     bitcoind: {
-      description: 'Used to subscribe to new block events.',
+      description: bitcoinDescription,
       optional: true,
       metadata: {
         title: 'Bitcoin',
-        icon: 'https://bitcoin.org/img/icons/opengraph.png',
+        icon: 'https://raw.githubusercontent.com/Start9Labs/bitcoin-knots-startos/cd8e4a6c77c8513cf1eca1997eb8029ed62b3863/dep-icon.svg',
       },
     },
   },
