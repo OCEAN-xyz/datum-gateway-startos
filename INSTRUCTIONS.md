@@ -107,7 +107,9 @@ Copy and paste the following lines of code one by one:
 
 Now copy and paste the following chunk of code in one command:
 
+```
 echo -e '[Unit]\nDescription=Simpleproxy Datum Forward\nWants=podman.service\nAfter=podman.service\n\n[Service]\nType=simple\nRestart=always\nRestartSec=3\nExecStartPre=/bin/bash -c "/bin/systemctl set-environment IP=$(ip route | grep default | awk '\\''{print $9}'\\'')"\nExecStart=/usr/bin/simpleproxy -L ${IP}:23334 -R datum.embassy:23335\n\n[Install]\nWantedBy=multi-user.target' > /lib/systemd/system/simpleproxy.datum.service
+```
 
 Next, copy and paste the following:
 
