@@ -2,8 +2,8 @@ import { VersionInfo, IMPOSSIBLE, YAML } from '@start9labs/start-sdk'
 import { readFile, rm } from 'fs/promises'
 import { configJson } from '../../fileModels/datum_gateway_config.json'
 
-export const v_0_4_1_2_b0 = VersionInfo.of({
-  version: '0.4.1:2-beta.0',
+export const v_0_4_1_2_b1 = VersionInfo.of({
+  version: '0.4.1:2-beta.1',
   releaseNotes: {
     en_US: 'Initial release for StartOS 0.4.0',
     es_ES: 'Versión inicial para StartOS 0.4.0',

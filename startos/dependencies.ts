@@ -1,9 +1,9 @@
+import { autoconfig } from 'bitcoin-knots/startos/actions/config/autoconfig'
 import { i18n } from './i18n'
 import { sdk } from './sdk'
-import { otherConfig } from 'bitcoin-knots/startos/actions/config/other'
 
 export const setDependencies = sdk.setupDependencies(async ({ effects }) => {
-  await sdk.action.createTask(effects, 'bitcoind', otherConfig, 'critical', {
+  await sdk.action.createTask(effects, 'bitcoind', autoconfig, 'critical', {
     input: {
       kind: 'partial',
       value: {
@@ -17,7 +17,7 @@ export const setDependencies = sdk.setupDependencies(async ({ effects }) => {
   return {
     bitcoind: {
       kind: 'running',
-      versionRange: '>=29.1:2-beta.0',
+      versionRange: '>=29.3:1-beta.0',
       healthChecks: ['bitcoind'],
     },
   }
