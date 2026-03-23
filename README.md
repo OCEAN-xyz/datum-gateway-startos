@@ -166,9 +166,9 @@ The Stratum health check requires the datum daemon to be ready first.
 
 ## Dependencies
 
-| Dependency                    | Required | Version          | Purpose                                                                                     |
-| ----------------------------- | -------- | ---------------- | ------------------------------------------------------------------------------------------- |
-| **Bitcoin Node** (`bitcoind`) | Optional | >= 29.1:2-beta.0 | Block template generation via `getblocktemplate`; new block notifications via `blocknotify` |
+| Dependency                    | Required | Purpose                                                                                     |
+| ----------------------------- | -------- | ------------------------------------------------------------------------------------------- |
+| **Bitcoin Node** (`bitcoind`) | Optional | Block template generation via `getblocktemplate`; new block notifications via `blocknotify` |
 
 When the Bitcoin dependency is configured, Datum Gateway automatically creates a task on `bitcoind` to set `blocknotify = curl -s -m5 http://datum.startos:7152/NOTIFY`. This task is re-evaluated on every init to ensure the setting persists.
 
@@ -217,7 +217,7 @@ ports:
   ui: 7152
   stratum: 23334
 dependencies:
-  - bitcoind (optional, >= 29.1:2-beta.0)
+  - bitcoind (optional)
 startos_managed_files:
   - data/datum_gateway_config.json
 actions:

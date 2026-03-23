@@ -2,14 +2,14 @@ import { VersionInfo, IMPOSSIBLE, YAML } from '@start9labs/start-sdk'
 import { readFile, rm } from 'fs/promises'
 import { configJson } from '../../fileModels/datum_gateway_config.json'
 
-export const v_0_4_1_2_b4 = VersionInfo.of({
-  version: '0.4.1:2-beta.4',
+export const v_0_4_1_2_b5 = VersionInfo.of({
+  version: '0.4.1:2-beta.5',
   releaseNotes: {
-    en_US: 'Initial release for StartOS 0.4.0',
-    es_ES: 'Versión inicial para StartOS 0.4.0',
-    de_DE: 'Erstveröffentlichung für StartOS 0.4.0',
-    pl_PL: 'Pierwsze wydanie dla StartOS 0.4.0',
-    fr_FR: 'Version initiale pour StartOS 0.4.0',
+    en_US: 'Update to StartOS SDK beta.65',
+    es_ES: 'Actualización a StartOS SDK beta.65',
+    de_DE: 'Update auf StartOS SDK beta.65',
+    pl_PL: 'Aktualizacja do StartOS SDK beta.65',
+    fr_FR: 'Mise à jour vers StartOS SDK beta.65',
   },
   migrations: {
     up: async ({ effects }) => {
