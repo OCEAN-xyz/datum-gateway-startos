@@ -1,4 +1,5 @@
 import { manifest } from 'bitcoin-knots/startos/manifest'
+import { FileHelper } from '@start9labs/start-sdk'
 import { configJson } from './fileModels/datum_gateway_config.json'
 import { i18n } from './i18n'
 import { sdk } from './sdk'
@@ -12,27 +13,34 @@ export const main = sdk.setupMain(async ({ effects }) => {
     throw new Error('datum config file not found')
   }
 
+  const datumSub = await sdk.SubContainer.of(
+    effects,
+    { imageId: 'datum' },
+    sdk.Mounts.of()
+      .mountVolume({
+        volumeId: 'main',
+        subpath: null,
+        mountpoint: '/root',
+        readonly: false,
+      })
+      .mountDependency<typeof manifest>({
+        dependencyId: 'bitcoind',
+        volumeId: 'main',
+        subpath: null,
+        mountpoint: knotsMountpoint,
+        readonly: true,
+      }),
+    'datum-sub',
+  )
+
+  // Restart daemon chain if bitcoind's cookie file changes
+  await FileHelper.string(`${datumSub.rootfs}${knotsMountpoint}/.cookie`)
+    .read()
+    .const(effects)
+
   return sdk.Daemons.of(effects)
     .addDaemon('datum', {
-      subcontainer: await sdk.SubContainer.of(
-        effects,
-        { imageId: 'datum' },
-        sdk.Mounts.of()
-          .mountVolume({
-            volumeId: 'main',
-            subpath: null,
-            mountpoint: '/root',
-            readonly: false,
-          })
-          .mountDependency<typeof manifest>({
-            dependencyId: 'bitcoind',
-            volumeId: 'main',
-            subpath: null,
-            mountpoint: knotsMountpoint,
-            readonly: true,
-          }),
-        'datum-sub',
-      ),
+      subcontainer: datumSub,
       exec: {
         command: [
           'datum_gateway',

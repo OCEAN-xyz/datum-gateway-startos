@@ -1,11 +1,12 @@
-import { sdk } from '../sdk'
-import { setDependencies } from '../dependencies'
-import { setInterfaces } from '../interfaces'
-import { versionGraph } from '../install/versionGraph'
 import { actions } from '../actions'
 import { restoreInit } from '../backups'
-import { taskResetPassword } from './taskResetPassword'
+import { setDependencies } from '../dependencies'
+import { setInterfaces } from '../interfaces'
+import { sdk } from '../sdk'
+import { versionGraph } from '../versions'
+import { seedFiles } from './seedFiles'
 import { taskConfigPoolAddress } from './taskConfigPoolAddress'
+import { taskResetPassword } from './taskResetPassword'
 
 export const init = sdk.setupInit(
   restoreInit,
@@ -13,6 +14,7 @@ export const init = sdk.setupInit(
   setInterfaces,
   setDependencies,
   actions,
+  seedFiles,
   taskResetPassword,
   taskConfigPoolAddress,
 )
