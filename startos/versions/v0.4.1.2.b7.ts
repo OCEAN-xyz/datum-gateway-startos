@@ -2,8 +2,8 @@ import { IMPOSSIBLE, VersionInfo, YAML } from '@start9labs/start-sdk'
 import { readFile, rm } from 'fs/promises'
 import { configJson } from '../fileModels/datum_gateway_config.json'
 
-export const v_0_4_1_2_b6 = VersionInfo.of({
-  version: '0.4.1:2-beta.6',
+export const v_0_4_1_2_b7 = VersionInfo.of({
+  version: '0.4.1:2-beta.7',
   releaseNotes: {
     en_US:
       'Watch bitcoind cookie file for changes to fix RPC auth after bitcoind restarts',
