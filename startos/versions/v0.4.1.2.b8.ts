@@ -2,19 +2,19 @@ import { IMPOSSIBLE, VersionInfo, YAML } from '@start9labs/start-sdk'
 import { readFile, rm } from 'fs/promises'
 import { configJson } from '../fileModels/datum_gateway_config.json'
 
-export const v_0_4_1_2_b7 = VersionInfo.of({
-  version: '0.4.1:2-beta.7',
+export const v_0_4_1_2_b8 = VersionInfo.of({
+  version: '0.4.1:2-beta.8',
   releaseNotes: {
     en_US:
-      'Watch bitcoind cookie file for changes to fix RPC auth after bitcoind restarts',
+      'Strip rpcuser/rpcpassword from config to force cookie auth for bitcoind RPC',
     es_ES:
-      'Vigilar el archivo cookie de bitcoind para corregir la autenticación RPC tras reiniciar bitcoind',
+      'Eliminar rpcuser/rpcpassword de la configuración para forzar autenticación por cookie en bitcoind RPC',
     de_DE:
-      'Bitcoin-Cookie-Datei auf Änderungen überwachen, um RPC-Authentifizierung nach bitcoind-Neustart zu beheben',
+      'rpcuser/rpcpassword aus der Konfiguration entfernen, um Cookie-Authentifizierung für bitcoind-RPC zu erzwingen',
     pl_PL:
-      'Obserwuj plik cookie bitcoind w celu naprawy uwierzytelniania RPC po ponownym uruchomieniu bitcoind',
+      'Usuń rpcuser/rpcpassword z konfiguracji, aby wymusić uwierzytelnianie cookie dla bitcoind RPC',
     fr_FR:
-      "Surveiller le fichier cookie de bitcoind pour corriger l'authentification RPC après le redémarrage de bitcoind",
+      "Supprimer rpcuser/rpcpassword de la configuration pour forcer l'authentification par cookie pour bitcoind RPC",
   },
   migrations: {
     up: async ({ effects }) => {

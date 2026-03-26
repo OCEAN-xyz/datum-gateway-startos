@@ -14,6 +14,8 @@ const bitcoindShape = z.object({
   rpcurl: z
     .literal('http://bitcoind.startos:8332')
     .catch('http://bitcoind.startos:8332'),
+  rpcuser: z.undefined().catch(undefined),
+  rpcpassword: z.undefined().catch(undefined),
   // Configurable (upstream defaults apply when absent)
   work_update_seconds: optNumber,
   notify_fallback: optBoolean,
