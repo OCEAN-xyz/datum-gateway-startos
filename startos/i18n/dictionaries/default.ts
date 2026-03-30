@@ -8,6 +8,10 @@ const dict = {
   'Stratum Interface': 3,
   'Stratum server is available': 4,
   'Stratum server is unavailable': 5,
+  'Number of Stratum Clients Connected': 6,
+  'Connected Clients: {num}': 7,
+  'Waiting for stratum logs...': 8,
+  'No stratum clients connected': 9,
 
   // interfaces.ts
   'Web UI': 20,

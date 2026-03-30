@@ -70,4 +70,39 @@ export const main = sdk.setupMain(async ({ effects }) => {
       },
       requires: ['datum'],
     })
+    .addHealthCheck('stratum-clients-connected', {
+      ready: {
+        display: i18n('Number of Stratum Clients Connected'),
+        trigger: sdk.trigger.cooldownTrigger(40000),
+        fn: async () => {
+          const logFile =
+            (await configJson.read((c) => c?.logger?.log_file).const(effects)) ||
+            '/root/logs.txt'
+          try {
+            const { stdout } = await datumSub.exec([
+              'sh',
+              '-c',
+              `grep -oP "(?<=Sent to )[0-9]+(?= stratum clients)" ${logFile} | tail -n 1`,
+            ])
+            const num = stdout.toString().trim()
+            if (num) {
+              return {
+                result: 'success',
+                message: i18n('Connected Clients: {num}', { num }),
+              }
+            }
+            return {
+              result: 'success',
+              message: i18n('No stratum clients connected'),
+            }
+          } catch (e) {
+            return {
+              result: 'success',
+              message: i18n('Waiting for stratum logs...'),
+            }
+          }
+        },
+      },
+      requires: ['datum'],
+    })
 })
