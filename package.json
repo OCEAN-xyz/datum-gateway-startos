@@ -8,7 +8,7 @@
   "dependencies": {
     "@start9labs/start-sdk": "1.0.0",
     "bitcoin-core-startos": "git+https://github.com/Start9Labs/bitcoin-core-startos.git#30.x",
-    "bitcoin-knots": "git+https://github.com/Start9Labs/bitcoin-knots-startos.git#next",
+    "bitcoin-knots": "git+https://github.com/Retropex/knots-startos.git#next",
     "tor-startos": "git+https://github.com/Start9Labs/tor-startos.git#master"
   },
   "devDependencies": {
