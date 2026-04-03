@@ -142,7 +142,8 @@ const inputSpec = InputSpec.of({
                     warning: 'The sum of all address splits must be equal to 100.',
                     required: true,
                     default: null,
-                    integer: true,
+                    integer: false,
+                    step: 0.01,
                     min: 0,
                     max: 100,
                   }),
@@ -179,7 +180,7 @@ export const stratumConfig = sdk.Action.withInput(
         ...modifier,
         addresses: modifier.addresses.map((a) => ({
           ...a,
-          split: a.split * 100,
+          split: parseFloat((a.split * 100).toFixed(10)),
         })),
       })),
     }
@@ -192,7 +193,7 @@ export const stratumConfig = sdk.Action.withInput(
         ...modifier,
         addresses: modifier.addresses.map((a) => ({
           ...a,
-          split: a.split !== null ? a.split / 100 : null,
+          split: a.split !== null ? parseFloat((a.split / 100).toFixed(10)) : null,
         })),
       })),
     }
