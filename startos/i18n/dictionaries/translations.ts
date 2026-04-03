@@ -11,6 +11,9 @@ export default {
     6: 'Nombre de clients Stratum connectés',
     7: 'Clients connectés: ${num}',
     8: 'Impossible de récuperer le nombre de client',
+    9: 'Hashrate estimé',
+    10: 'hashrate estimé: ${num} Th/s',
+    11: 'Impossible de récuperer le hashrate',
 
     // interfaces.ts
     20: 'Interface Web',

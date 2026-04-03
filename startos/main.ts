@@ -101,4 +101,34 @@ export const main = sdk.setupMain(async ({ effects }) => {
       },
     requires: ['datum'],
   })
+  .addHealthCheck('estimated-hashrate', {
+    ready: {
+      display: i18n('Estimated Hashrate'),
+      trigger: sdk.trigger.cooldownTrigger(10000),
+      fn: async () => {
+          try {
+            const { stdout } = await datumSub.exec([
+              'sh',
+              '-c',
+              `curl -s 127.0.0.1:7152 | grep -A1 "Estimated Hashrate:" | tail -n 1 | sed 's/[^0-9\.?]*//g'`,
+            ])
+            const num = stdout.toString().trim()
+            if (num) {
+              return {
+                result: 'success',
+                message: i18n('Estimated Hashrate: ${num} Th/s', { num }),
+              }
+            } else {
+              throw new Error()
+            }
+          } catch (e) {
+            return {
+              result: 'success',
+              message: i18n('Couldn\'t fetch the hashrate'),
+            }
+          }
+        },
+      },
+    requires: ['datum'],
+  })
 })
