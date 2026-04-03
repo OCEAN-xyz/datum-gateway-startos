@@ -139,6 +139,7 @@ const inputSpec = InputSpec.of({
                   }),
                   split: Value.number({
                     name: i18n('Address split percentage'),
+                    warning: 'The sum of all address splits must be equal to 100.',
                     required: true,
                     default: null,
                     integer: false,
