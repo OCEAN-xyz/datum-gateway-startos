@@ -92,11 +92,11 @@ export const datumConfig = sdk.Action.withInput(
     if (!datum) return {}
     return {
       ...datum,
-      reward_sharing: datum.pooled_mining_only
-        ? 'require'
-        : datum.pool_host
-          ? 'prefer'
-          : 'never',
+      reward_sharing: datum.pool_host === "" && datum.pooled_mining_only === false 
+        ? 'never' 
+        : datum.pooled_mining_only === false 
+          ? 'prefer' 
+          : 'require'
     }
   },
 
