@@ -2,19 +2,19 @@ import { IMPOSSIBLE, VersionInfo, YAML } from '@start9labs/start-sdk'
 import { readFile, rm } from 'fs/promises'
 import { configJson } from '../fileModels/datum_gateway_config.json'
 
-export const v_0_4_1_3 = VersionInfo.of({
-  version: '0.4.1:3',
+export const v_0_4_1_4 = VersionInfo.of({
+  version: '0.4.1:4',
   releaseNotes: {
     en_US:
-      'Strip rpcuser/rpcpassword from config to force cookie auth for bitcoind RPC',
+      'Fix the read logic for reward sharing in the datum config section',
     es_ES:
-      'Eliminar rpcuser/rpcpassword de la configuración para forzar autenticación por cookie en bitcoind RPC',
+      'Corregir la lógica de lectura para el reparto de recompensas en la sección de configuración del datum',
     de_DE:
-      'rpcuser/rpcpassword aus der Konfiguration entfernen, um Cookie-Authentifizierung für bitcoind-RPC zu erzwingen',
+      'Die Leselogik für das Belohnungs-Sharing im Datum-Konfigurationsabschnitt beheben',
     pl_PL:
-      'Usuń rpcuser/rpcpassword z konfiguracji, aby wymusić uwierzytelnianie cookie dla bitcoind RPC',
+      'Napraw logikę odczytu dla udostępniania nagród w sekcji konfiguracji datum',
     fr_FR:
-      "Supprimer rpcuser/rpcpassword de la configuration pour forcer l'authentification par cookie pour bitcoind RPC",
+      "Corriger la logique de lecture pour le partage des récompenses dans la section de configuration de datum",
   },
   migrations: {
     up: async ({ effects }) => {
